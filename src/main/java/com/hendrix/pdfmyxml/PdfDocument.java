@@ -98,7 +98,7 @@ public class PdfDocument implements IDisposable{
     }
 
     /**
-     * add a page with a custom class view renderer. please not that the bitmap of the view will be recycled.
+     * add a page with a custom class view renderer. please note that <b>the bitmap of the view will be recycled.</b>
      *
      * @param page a view renderer instance
      *
@@ -112,7 +112,7 @@ public class PdfDocument implements IDisposable{
     }
 
     /**
-     * add a page with a rendered bitmap. the bitmap will not be recycled, it's up to
+     * add a page with a rendered bitmap. the bitmap <b>will not be recycled</b>, it's up to
      * the user to recycle.
      *
      * @param page a bitmap
@@ -433,7 +433,7 @@ public class PdfDocument implements IDisposable{
         }
 
         /**
-         * add a page with a custom class view renderer. please not that the bitmap of the view will be recycled.
+         * add a page with a custom class view renderer. please note that <b>the bitmap of the view will be recycled</b>.
          *
          * @param page a view renderer instance
          *
@@ -446,7 +446,7 @@ public class PdfDocument implements IDisposable{
         }
 
         /**
-         * add a page with a rendered bitmap. the bitmap will not be recycled, it's up to
+         * add a page with a rendered bitmap. <b>the bitmap will not be recycled</b>, it's up to
          * the user to recycle.
          *
          * @param page a bitmap
