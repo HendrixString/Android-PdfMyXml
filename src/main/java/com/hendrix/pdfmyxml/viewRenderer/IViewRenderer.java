@@ -4,12 +4,13 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.view.View;
 
+import com.hendrix.pdfmyxml.interfaces.IData;
 import com.hendrix.pdfmyxml.interfaces.IDisposable;
 
 /**
  * @author Tomer Shalev
  */
-public interface IViewRenderer extends IDisposable {
+public interface IViewRenderer extends IDisposable, IData {
 
     /**
      * attach a context to the renderer

@@ -1,11 +1,12 @@
 package com.hendrix.pdfmyxml;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Handler;
+import android.util.Log;
 
 import com.hendrix.pdfmyxml.interfaces.IDisposable;
 import com.hendrix.pdfmyxml.utils.BitmapUtils;
@@ -31,6 +32,8 @@ import java.util.ArrayList;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class PdfDocument implements IDisposable{
+    static final private String TAG_PDF_MY_XML = "PDF_MY_XML";
+
     private static final String sDefault_Filename_prefix                      = "pdf_";
     // android context
     private Context                             _ctx                    = null;
@@ -60,6 +63,12 @@ public class PdfDocument implements IDisposable{
     private Thread                              _thread                 = null;
     // has IO error happened
     private boolean                             _error_io               = false;
+
+    /**
+     * the rendered dimensions in {@code Pixels} of the {@link AbstractViewRenderer}
+     */
+    private int                                 _renderWidth            = 0;
+    private int                                 _renderHeight           = 0;
 
     public PdfDocument(Context ctx) {
         setContext(ctx);
@@ -121,6 +130,35 @@ public class PdfDocument implements IDisposable{
     public void addPage(Bitmap page) {
         ByteArrayInputStream stream = BitmapUtils.bitmapToPngInputStream(page);
         _pages_rendered.add(stream);
+    }
+
+    /**
+     * clear all of the pages and rendered pages
+     */
+    public void clearPages()
+    {
+        _pages.clear();
+        _pages_rendered.clear();
+    }
+
+    /**
+     * set the rendered width in {@code Pixels} of the {@link AbstractViewRenderer}
+     *
+     * @param value width in {@code Pixels}
+     */
+    public void setRenderWidth(int value)
+    {
+        _renderWidth = value;
+    }
+
+    /**
+     * set the rendered height in {@code Pixels} of the {@link AbstractViewRenderer}
+     *
+     * @param value height in {@code Pixels}
+     */
+    public void setRenderHeight(int value)
+    {
+        _renderHeight = value;
     }
 
     /**
@@ -222,7 +260,7 @@ public class PdfDocument implements IDisposable{
      *
      * @param window an {@link android.app.Activity} in which to display a progress dialog (Optional)
      */
-    public void createPdf(Activity window) {
+    public void createPdf(Context window) {
         if (isWorking())
             return;
 
@@ -244,15 +282,22 @@ public class PdfDocument implements IDisposable{
             public void run() {
                 _isWorking = true;
 
-                _pages_rendered.clear();
+                //_pages_rendered.clear();
 
                 if(!_inflateOnMainThread) {
                     for (AbstractViewRenderer view : _pages) {
+                        Log.i(TAG_PDF_MY_XML, "render page");
                         renderView(view);
                     }
                 }
 
                 internal_generatePdf();
+
+                Log.i(TAG_PDF_MY_XML, "pdf 1");
+
+                clearPages();
+
+                Log.i(TAG_PDF_MY_XML, "pdf 2");
 
                 // go back to the main thread
                 _handler.post(new Runnable() {
@@ -268,8 +313,9 @@ public class PdfDocument implements IDisposable{
                                 _listener.onComplete(file);
                         }
 
-                        release();
+                        Log.i(TAG_PDF_MY_XML, "pdf 3");
 
+                        release();
                     }
                 });
 
@@ -277,8 +323,8 @@ public class PdfDocument implements IDisposable{
 
         });
 
+        _thread.setPriority(Thread.MAX_PRIORITY);
         _thread.start();
-
     }
 
     private Callback _listener = null;
@@ -317,6 +363,8 @@ public class PdfDocument implements IDisposable{
                 page                = new Page(pdf, _orientation.A4());
                 image               = new Image(pdf, inputStream, ImageType.PNG);
 
+                Log.i(TAG_PDF_MY_XML, "add page");
+
                 inputStream.close(); //doesn't do anything in byte array
 
                 ar                  = page.getWidth() / image.getWidth();
@@ -344,7 +392,11 @@ public class PdfDocument implements IDisposable{
     private void renderView(AbstractViewRenderer page) {
         page.attachContext(_ctx);
 
-        Bitmap bmp                  = page.render(0, 0);
+        if(_renderWidth==0 || _renderHeight==0)
+            if(Build.VERSION.SDK_INT <= 17)
+                Log.e(TAG_PDF_MY_XML, "_renderWidth,_renderHeight==0 on API <= 17 can lead to bad behaviour with RelativeLayout and may crash, please use explicit values!!!");
+
+        Bitmap bmp                  = page.render(_renderWidth, _renderHeight);
         ByteArrayInputStream stream = BitmapUtils.bitmapToPngInputStream(bmp);
 
         page.disposeBitmap();
@@ -359,7 +411,7 @@ public class PdfDocument implements IDisposable{
         _pages.clear();
         _pages_rendered.clear();
 
-        _error_io   =   false;
+        _error_io   = false;
         _isWorking  = false;
 
         file_name   = null;
@@ -424,7 +476,7 @@ public class PdfDocument implements IDisposable{
         }
 
         /**
-         * create the pdf document instance. afterwards, use {@link com.hendrix.pdfmyxml.PdfDocument#createPdf(android.app.Activity)}
+         * create the pdf document instance. afterwards, use {@link com.hendrix.pdfmyxml.PdfDocument#createPdf(Context)}
          *
          * @return a {@link com.hendrix.pdfmyxml.PdfDocument}
          */
@@ -443,6 +495,26 @@ public class PdfDocument implements IDisposable{
             _doc.addPage(page);
 
             return this;
+        }
+
+        /**
+         * set the rendered width in {@code Pixels} of the {@link AbstractViewRenderer}
+         *
+         * @param value width in {@code Pixels}
+         */
+        public void setRenderWidth(int value)
+        {
+            _doc.setRenderWidth(value);
+        }
+
+        /**
+         * set the rendered height in {@code Pixels} of the {@link AbstractViewRenderer}
+         *
+         * @param value height in {@code Pixels}
+         */
+        public void setRenderHeight(int value)
+        {
+            _doc.setRenderHeight(value);
         }
 
         /**

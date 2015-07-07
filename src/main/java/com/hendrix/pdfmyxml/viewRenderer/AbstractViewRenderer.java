@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.hendrix.pdfmyxml.utils.MeasureUtils;
 
@@ -17,6 +18,7 @@ abstract public class AbstractViewRenderer implements IViewRenderer {
     protected Context   _ctx                = null;
     private Bitmap      _bmp                = null;
     private boolean     _flagReuseBitmap    = false;
+    private Object      _data               = null;
 
     /**
      *
@@ -53,11 +55,14 @@ abstract public class AbstractViewRenderer implements IViewRenderer {
     }
 
     /**
-     * render the view
+     * render the view with a reused {@link Bitmap}
      *
-     * @param bitmap a bitmap to render into
+     * @param bitmap a bitmap to render into (reused)
      * @param width  the width
      * @param height the height
+     *
+     * <h1>Note: </h1>
+     * on API <= 17, you must give explicit {@code width} and {@code height} because of a bug in {@link android.widget.RelativeLayout}
      */
     @Override
     public final Bitmap render(Bitmap bitmap, int width, int height) {
@@ -88,10 +93,55 @@ abstract public class AbstractViewRenderer implements IViewRenderer {
     /**
      * render the bitmap
      *
-     * @param width the wanted width for rendering, in DIP. if 0, then the view will measure itself as big as it needs to be.
-     * @param height the wanted height for rendering, in DIP. if 0, then the view will measure itself as big as it needs to be.
+     * @param width  the wanted width for rendering, in Pixels. if 0, then the view will measure itself as big as it needs to be(only on <b>API > 17</b>).
+     * @param height the wanted height for rendering, in Pixels. if 0, then the view will measure itself as big as it needs to be(only on <b>API > 17</b>).
+     *
+     * <h1>Note: </h1>
+     * on <b>API <= 17</b>, you must give explicit {@code width} and {@code height} because of a bug in {@link android.widget.RelativeLayout}
      */
     @Override final public Bitmap render(int width, int height) {
+        validate();
+
+        initView(getView());
+
+        View view       = getView();
+
+        int specWidth   = View.MeasureSpec.makeMeasureSpec(width  == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : width,  width == 0 ? View.MeasureSpec.UNSPECIFIED : View.MeasureSpec.EXACTLY);
+        int specHeight  = View.MeasureSpec.makeMeasureSpec(height == 0 ? ViewGroup.LayoutParams.WRAP_CONTENT : height, height==0  ? View.MeasureSpec.UNSPECIFIED : View.MeasureSpec.EXACTLY);
+        int a = ViewGroup.LayoutParams.MATCH_PARENT;
+        System.out.println("a");
+
+        try {
+            view.measure(specWidth, specHeight);
+        }
+        catch (NullPointerException exc) {
+            exc.printStackTrace();
+        }
+
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+
+        Bitmap b;
+
+        // recycle bitmap
+        if(!_flagReuseBitmap) {
+            disposeBitmap();
+            b = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        }
+        else {
+            // reuse bitmap
+            b = (_bmp==null || _bmp.isRecycled()) ? Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888) : _bmp;
+            b.eraseColor(Color.TRANSPARENT);
+        }
+
+        Canvas c        = new Canvas(b);
+        c.translate(-view.getScrollX(), -view.getScrollY());
+
+        view.draw(c);
+
+        return _bmp=b;
+    }
+
+     final public Bitmap render2(int width, int height) {
         validate();
 
         initView(getView());
@@ -101,7 +151,12 @@ abstract public class AbstractViewRenderer implements IViewRenderer {
         int specWidth   = View.MeasureSpec.makeMeasureSpec(MeasureUtils.DIPToPixels(_ctx, width),  width==0   ? View.MeasureSpec.UNSPECIFIED : View.MeasureSpec.EXACTLY);
         int specHeight  = View.MeasureSpec.makeMeasureSpec(MeasureUtils.DIPToPixels(_ctx, height), height==0  ? View.MeasureSpec.UNSPECIFIED : View.MeasureSpec.EXACTLY);
 
-        view.measure(specWidth, specHeight);
+        try {
+            view.measure(specWidth, specHeight);
+        }
+        catch (NullPointerException exc) {
+            exc.printStackTrace();
+        }
 
         view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
 
@@ -218,5 +273,15 @@ abstract public class AbstractViewRenderer implements IViewRenderer {
         if(_bmp != null)
             _bmp.recycle();
         _bmp = null;
+    }
+
+    @Override
+    public void setData(Object data) {
+        _data = data;
+    }
+
+    @Override
+    public Object getData() {
+        return _data;
     }
 }
