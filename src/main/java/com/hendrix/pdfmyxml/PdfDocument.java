@@ -32,7 +32,7 @@ import java.util.ArrayList;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class PdfDocument implements IDisposable{
-    static final private String TAG_PDF_MY_XML = "PDF_MY_XML";
+    static final public String TAG_PDF_MY_XML = "PDF_MY_XML";
 
     private static final String sDefault_Filename_prefix                      = "pdf_";
     // android context
@@ -502,9 +502,11 @@ public class PdfDocument implements IDisposable{
          *
          * @param value width in {@code Pixels}
          */
-        public void setRenderWidth(int value)
+        public Builder renderWidth(int value)
         {
             _doc.setRenderWidth(value);
+
+            return this;
         }
 
         /**
@@ -512,9 +514,11 @@ public class PdfDocument implements IDisposable{
          *
          * @param value height in {@code Pixels}
          */
-        public void setRenderHeight(int value)
+        public Builder renderHeight(int value)
         {
             _doc.setRenderHeight(value);
+
+            return this;
         }
 
         /**
