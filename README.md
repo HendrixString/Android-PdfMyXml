@@ -10,7 +10,8 @@ simply fork or download the project, you can also download and create `.aar` fil
 ## Notable features
 * should work on all Android versions
 * completely scalable
-* supports bitmap re usage
+* supports bitmap re usage.
+* production proved code. Used in a commercial project.
 
 ##### Examples
 1. First create XML layouts. give it dimensions in pixels (and for all it's sub views) and proportions according landscape or portrait according to ratio 1:1.41.<br/><br/>
@@ -32,9 +33,9 @@ page1.xml
 
 you can create as many as pages/templates as you need.
 
-2. implement you View renderer by extending `AbstractViewRenderer` or by anonymously instantiating it and injecting the layout id.
+2. implement your View renderer by extending `AbstractViewRenderer` or by anonymously instantiating it and injecting the layout id. the initView(View view) will supply you an inflated View automatically. There are other options but I wont cover it now.
 ```
-AbstractViewRenderer page = new AbstractViewRenderer(this, R.layout.page1) {
+AbstractViewRenderer page = new AbstractViewRenderer(context, R.layout.page1) {
     private String _text;
 
     public void setText(String text) {
@@ -53,7 +54,7 @@ page.setReuseBitmap(true);
 
 ```
 
-3. Use `PdfDocument` to render and run it all at background with progress bar.
+3. Use `PdfDocument` or `PdfDocument.Builder` to add pages and render and run it all at background with progress bar.
 ```
 PdfDocument doc            = new PdfDocument(ctx);
 
