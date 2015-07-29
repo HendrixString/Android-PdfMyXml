@@ -13,7 +13,7 @@ simply fork or download the project, you can also download and create `.aar` fil
 * supports bitmap re usage
 
 ##### Examples
-1. First create XML layouts. give it dimensions in pixels (and for all it's sub views) and proportions according landscape or portrait according to ratio 1:1.41
+1. First create XML layouts. give it dimensions in pixels (and for all it's sub views) and proportions according landscape or portrait according to ratio 1:1.41.<br/><br/>
 page1.xml
 ```
 <?xml version="1.0" encoding="utf-8"?>
