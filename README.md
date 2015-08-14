@@ -58,6 +58,9 @@ page.setReuseBitmap(true);
 ```
 PdfDocument doc            = new PdfDocument(ctx);
 
+// add as many pages as you have
+doc.addPage(page);
+
 doc.setRenderWidth(2115);
 doc.setRenderHeight(1500);
 doc.setOrientation(PdfDocument.A4_MODE.LANDSCAPE);
