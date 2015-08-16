@@ -13,8 +13,9 @@ simply fork or download the project, you can also download and create `.aar` fil
 * supports bitmap re usage.
 * production proved code. Used in a commercial project.
 
-##### Examples
-1. First create XML layouts. give it dimensions in pixels (and for all it's sub views) and proportions according landscape or portrait according to ratio 1:1.41.<br/><br/>
+##### How To Use
+###### 1. create XML layouts
+First create XML layouts. give it dimensions in pixels (and for all it's sub views) and proportions according landscape or portrait according to ratio 1:1.41.<br/><br/>
 page1.xml
 ```
 <?xml version="1.0" encoding="utf-8"?>
@@ -33,7 +34,8 @@ page1.xml
 
 you can create as many as pages/templates as you need.
 
-2. implement your View renderer by extending `AbstractViewRenderer` or by anonymously instantiating it and injecting the layout id. the initView(View view) will supply you an inflated View automatically. There are other options but I wont cover it now.
+###### 2. Implement a View renderer
+implement your View renderer by extending `AbstractViewRenderer` or by anonymously instantiating it and injecting the layout id. the initView(View view) will supply you an inflated View automatically. There are other options but I wont cover it now.
 ```
 AbstractViewRenderer page = new AbstractViewRenderer(context, R.layout.page1) {
     private String _text;
@@ -54,7 +56,8 @@ page.setReuseBitmap(true);
 
 ```
 
-3. Use `PdfDocument` or `PdfDocument.Builder` to add pages and render and run it all at background with progress bar.
+###### 3. Build the PDF document
+Use `PdfDocument` or `PdfDocument.Builder` to add pages and render and run it all at background with progress bar.
 ```
 PdfDocument doc            = new PdfDocument(ctx);
 
