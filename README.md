@@ -1,6 +1,8 @@
 # Android-PdfMyXml
 convert your android `XML` layouts into PDF document, works on all versions of Android.
 
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android--PdfMyXml-green.svg?style=flat)](https://android-arsenal.com/details/1/2297)
+
 ### Dependencies
 * [`pdfjet`](https://github.com/soster/pdfjet)
 
