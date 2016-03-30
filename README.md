@@ -80,7 +80,7 @@ doc.setListener(new PdfDocument.Callback() {
     }
 
     @Override
-    public void onError() {
+    public void onError(Exception e) {
         Log.i(PdfDocument.TAG_PDF_MY_XML, "Error");
     }
 });
@@ -100,7 +100,7 @@ new PdfDocument.Builder().context(this).addPage(page).filename("test").orientati
                              }
 
                              @Override
-                             public void onError() {
+                             public void onError(Exception e) {
                                  Log.i(PdfDocument.TAG_PDF_MY_XML, "Error");
                              }
                          }).create().createPdf(this);
