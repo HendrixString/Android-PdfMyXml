@@ -91,7 +91,7 @@ doc.createPdf(ctx);
 
 or use `PdfDocument.Builder`
 ```java
-new PdfDocument.Builder().context(this).addPage(page).filename("test").orientation(PdfDocument.A4_MODE.LANDSCAPE)
+new PdfDocument.Builder(ctx).addPage(page).filename("test").orientation(PdfDocument.A4_MODE.LANDSCAPE)
                          .progressMessage(R.string.gen_pdf_file).progressTitle(R.string.gen_please_wait).renderWidth(2115).renderHeight(1500)
                          .listener(new PdfDocument.Callback() {
                              @Override

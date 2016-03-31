@@ -459,19 +459,8 @@ public class PdfDocument implements IDisposable{
     public static class Builder {
         private PdfDocument _doc = null;
 
-        public Builder() {
-            _doc = new PdfDocument(null);
-        }
-
-        /**
-         * set the context
-         *
-         * @param ctx the context
-         */
-        public Builder context(Context ctx) {
-            _doc.setContext(ctx);
-
-            return this;
+        public Builder(Context ctx) {
+            _doc = new PdfDocument(ctx);
         }
 
         /**
