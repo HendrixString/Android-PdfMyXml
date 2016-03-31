@@ -61,8 +61,8 @@ public class PdfDocument implements IDisposable{
     private Handler                             _handler                = new Handler();
     // background thread
     private Thread                              _thread                 = null;
-    // has IO error happened
-    private boolean                             _error_io               = false;
+    // exception if happened
+    private Exception                           _error                  = null;
 
     /**
      * the rendered dimensions in {@code Pixels} of the {@link AbstractViewRenderer}
@@ -307,8 +307,8 @@ public class PdfDocument implements IDisposable{
                             _ringProgressDialog.dismiss();
 
                         if(_listener != null) {
-                            if(_error_io)
-                                _listener.onError();
+                            if(_error != null)
+                                _listener.onError(_error);
                             else
                                 _listener.onComplete(file);
                         }
@@ -349,7 +349,7 @@ public class PdfDocument implements IDisposable{
         boolean make                = dir.mkdir();
 
         file                        = new File(dir, file_name);
-        _error_io                   = false;
+        _error                      = null;
 
         try {
             FileOutputStream fos    = new FileOutputStream(file);//"Example_01.pdf");
@@ -378,8 +378,7 @@ public class PdfDocument implements IDisposable{
             fos.close();
         }
         catch (Exception exc) {
-            exc.printStackTrace();
-            _error_io               = true;
+            _error = exc;
         }
 
     }
@@ -411,7 +410,7 @@ public class PdfDocument implements IDisposable{
         _pages.clear();
         _pages_rendered.clear();
 
-        _error_io   = false;
+        _error      = null;
         _isWorking  = false;
 
         file_name   = null;
@@ -451,7 +450,7 @@ public class PdfDocument implements IDisposable{
         /**
          * error creating the PDF
          */
-        void onError();
+        void onError(Exception e);
     }
 
     /**
