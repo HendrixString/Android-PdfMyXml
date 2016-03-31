@@ -43,6 +43,8 @@ public class PdfDocument implements IDisposable{
     private String                              file_name;
     // file object of pdf
     private File                                file;
+    // save directory of pdf
+    private File                                save_directory;
     // state of the rendering
     private boolean                             _isWorking              = false;
     // inflate on main thread
@@ -227,6 +229,15 @@ public class PdfDocument implements IDisposable{
     }
 
     /**
+     * set the file save directory
+     *
+     * @param directory the pdf file save directory
+     */
+    public void setSaveDirectory(File directory) {
+        save_directory = directory;
+    }
+
+    /**
      *
      * @return the pdf {@link java.io.File} if available
      */
@@ -344,9 +355,7 @@ public class PdfDocument implements IDisposable{
 
         file_name                   = name + ".pdf";
         //File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "pdf");
-        File dir                    = new File(_ctx.getExternalFilesDir(null) + File.separator + "pdfdroid");
-
-        boolean make                = dir.mkdir();
+        File dir                    = save_directory == null ? _ctx.getExternalFilesDir(null) : save_directory;
 
         file                        = new File(dir, file_name);
         _error                      = null;
@@ -529,6 +538,17 @@ public class PdfDocument implements IDisposable{
          */
         public Builder filename(String name) {
             _doc.setFileName(name);
+
+            return this;
+        }
+
+        /**
+         * set the file save directory
+         *
+         * @param directory the pdf file save directory
+         */
+        public Builder saveDirectory(File directory) {
+            _doc.setSaveDirectory(directory);
 
             return this;
         }
