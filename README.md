@@ -7,7 +7,28 @@ convert your android `XML` layouts into PDF document, works on all versions of A
 * [`pdfjet`](https://github.com/soster/pdfjet)
 
 ## How to use
-simply fork or download the project, you can also download and create `.aar` file yourself.
+
+Option 1: Simply fork or download the project, you can also download and create `.aar` file yourself.
+
+Option 2: Jitpack
+
+Add Jitpack in your root build.gradle at the end of repositories:
+```groovy
+allprojects {
+    repositories {
+        ...
+        maven { url "https://jitpack.io" }
+    }
+}
+```
+
+Add to your dependencies:
+
+```groovy
+dependencies {
+    compile 'com.github.se-bastiaan:Android-PdfMyXml:1.0.1'
+}
+```
 
 ## Notable features
 * should work on all Android versions
