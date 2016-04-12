@@ -127,6 +127,9 @@ new PdfDocument.Builder(ctx).addPage(page).filename("test").orientation(PdfDocum
                          }).create().createPdf(this);
 ```
 
+### Additional Contributors
+* [`Sébastiaan`](https://github.com/se-bastiaan)
+
 ### License
 If you like it -> star or share it with others
 
