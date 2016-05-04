@@ -1,7 +1,5 @@
-# Android-PdfMyXml
+# Android-PdfMyXml [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android--PdfMyXml-green.svg?style=flat)](https://android-arsenal.com/details/1/2297) [![Jitpack](https://jitpack.io/v/HendrixString/Android-PdfMyXml.svg)](https://jitpack.io/#HendrixString/Android-PdfMyXml)
 convert your android `XML` layouts into PDF document, works on all versions of Android.
-
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-Android--PdfMyXml-green.svg?style=flat)](https://android-arsenal.com/details/1/2297)
 
 ### Dependencies
 * [`pdfjet`](https://github.com/soster/pdfjet)
@@ -26,7 +24,7 @@ Add to your dependencies:
 
 ```groovy
 dependencies {
-    compile 'com.github.se-bastiaan:Android-PdfMyXml:1.0.1'
+    compile 'com.github.hendrixstring:Android-PdfMyXml:{version}'
 }
 ```
 
