@@ -24,7 +24,7 @@ Add to your dependencies:
 
 ```groovy
 dependencies {
-    compile 'com.github.hendrixstring:Android-PdfMyXml:{version}'
+    compile 'com.github.HendrixString:Android-PdfMyXml:{Tag}' // the latest version is "v1.0.1"
 }
 ```
 
