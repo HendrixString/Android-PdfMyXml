@@ -48,7 +48,7 @@ public class PdfDocument implements IDisposable{
     // state of the rendering
     private boolean                             _isWorking              = false;
     // inflate on main thread
-    private boolean                             _inflateOnMainThread    = false;
+    private boolean                             _inflateOnMainThread    = true;
     // progress dialog
     private ProgressDialog                      _ringProgressDialog;
     // progress dialog message
