@@ -91,6 +91,7 @@ doc.setOrientation(PdfDocument.A4_MODE.LANDSCAPE);
 doc.setProgressTitle(R.string.gen_please_wait);
 doc.setProgressMessage(R.string.gen_pdf_file);
 doc.setFileName("test");
+doc.setSaveDirectory(_ctx.getExternalFilesDir(null));
 doc.setInflateOnMainThread(false);
 doc.setListener(new PdfDocument.Callback() {
     @Override
@@ -110,8 +111,11 @@ doc.createPdf(ctx);
 
 or use `PdfDocument.Builder`
 ```java
-new PdfDocument.Builder(ctx).addPage(page).filename("test").orientation(PdfDocument.A4_MODE.LANDSCAPE)
-                         .progressMessage(R.string.gen_pdf_file).progressTitle(R.string.gen_please_wait).renderWidth(2115).renderHeight(1500)
+new PdfDocument.Builder(ctx).addPage(page).orientation(PdfDocument.A4_MODE.LANDSCAPE)
+                         .progressMessage(R.string.gen_pdf_file).progressTitle(R.string.gen_please_wait)
+                         .renderWidth(2115).renderHeight(1500)
+                         .saveDirectory(_ctx.getExternalFilesDir(null));
+                         .filename("test")
                          .listener(new PdfDocument.Callback() {
                              @Override
                              public void onComplete(File file) {
