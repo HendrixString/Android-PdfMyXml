@@ -376,7 +376,14 @@ public class PdfDocument implements IDisposable{
 
                 inputStream.close(); //doesn't do anything in byte array
 
-                ar                  = page.getWidth() / image.getWidth();
+                float i_width = image.getWidth();
+                float i_height = image.getHeight();
+
+                if(i_width > i_height){
+                    ar = page.getWidth() / i_width;
+                }else {
+                    ar = page.getHeight() / i_height;
+                }
 
                 image.scaleBy(ar);
 
